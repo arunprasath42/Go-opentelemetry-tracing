@@ -14,10 +14,9 @@ import (
 )
 
 func GreetUser(c *gin.Context) {
-	// Get a tracer from the global provider
 	tracer := otel.Tracer("greet-user")
-	// Create a span
-	ctx, span := tracer.Start(c.Request.Context(), "GreetUser")
+	
+	ctx, span := tracer.Start(c.Request.Context(), "GreetUser")  // Create a span
 	defer span.End()
 
 	// span.SetAttributes(attribute.String("http.method", c.Request.Method))
@@ -30,10 +29,7 @@ func GreetUser(c *gin.Context) {
 		c.JSON(http.StatusInternalServerError, response.ErrorMessage(constant.INTERNALSERVERERROR, err))
 		return
 	}
-
-	//record the span
-	span.SetAttributes(attribute.String("user", saved))
-
+	span.SetAttributes(attribute.String("user", saved)) //record the span
 	log.Info().Msgf("Greetings to the user: %s", saved)
 	c.JSON(http.StatusOK, response.SuccessResponse(saved))
 }
