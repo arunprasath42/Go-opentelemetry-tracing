@@ -1,0 +1,20 @@
+# Server configurations
+server:
+  port: :8080
+
+# Application specific configurations
+application:
+  name: WebAPI
+  doc: http://localhost:8080
+
+logging:
+  level: DEBUG
+
+#Note: Please change the credentials according to your connection
+#MYSQL Crendentials 
+mysql:
+  user : "root"
+  password : "P@ssword123"
+  host: "127.0.0.1"
+  port : "3306"
+  dbname : "demo"
