@@ -14,13 +14,13 @@ import (
 )
 
 func GreetUser(c *gin.Context) {
-	tracer := otel.Tracer("greet-user")
-	
-	ctx, span := tracer.Start(c.Request.Context(), "GreetUser")  // Create a span
+	tracer := otel.GetTracerProvider().Tracer("greet-user")
+
+	ctx, span := tracer.Start(c.Request.Context(), "GreetUser") // Create a span
 	defer span.End()
 
-	// span.SetAttributes(attribute.String("http.method", c.Request.Method))
-	// span.SetAttributes(attribute.String("http.url", c.Request.URL.String()))
+	span.SetAttributes(attribute.String("http.method", c.Request.Method))
+	span.SetAttributes(attribute.String("http.url", c.Request.URL.String()))
 
 	var service = service.TestAPIUsers{}
 	saved, err := service.Greetings(ctx)
@@ -32,4 +32,5 @@ func GreetUser(c *gin.Context) {
 	span.SetAttributes(attribute.String("user", saved)) //record the span
 	log.Info().Msgf("Greetings to the user: %s", saved)
 	c.JSON(http.StatusOK, response.SuccessResponse(saved))
+
 }
