@@ -60,6 +60,8 @@ func initTracer() {
 		trace.WithSampler(trace.AlwaysSample()),
 		trace.WithBatcher(exporter),
 	)
+
+	fmt.Println("p", p)
 }
 
 func main() {
