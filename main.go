@@ -65,7 +65,7 @@ func initTracer() {
 }
 
 func main() {
-	initTracer()
+	//initTracer()
 	config.LoadConfig()
 	router := gin.Default()
 	corsConfig := cors.DefaultConfig()
