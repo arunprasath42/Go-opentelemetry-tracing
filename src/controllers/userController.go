@@ -11,13 +11,19 @@ import (
 	"github.com/rs/zerolog/log"
 	"go.opentelemetry.io/otel"
 	"go.opentelemetry.io/otel/attribute"
+	"go.opentelemetry.io/otel/trace"
 )
 
 func GreetUser(c *gin.Context) {
 	tracer := otel.GetTracerProvider().Tracer("greet-user")
 
-	ctx, span := tracer.Start(c.Request.Context(), "GreetUser") // Create a span
-	defer span.End()
+	// ctx, span := tracer.Start(c.Request.Context(), "GreetUser") // Create a span
+	// defer span.End()
+
+	ctx := c.Request.Context()
+
+	ctx, span := tracer.Start(ctx, "GreetUser",
+		trace.WithSpanKind(trace.SpanKindServer))
 
 	span.SetAttributes(attribute.String("http.method", c.Request.Method))
 	span.SetAttributes(attribute.String("http.url", c.Request.URL.String()))
