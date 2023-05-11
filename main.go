@@ -13,9 +13,12 @@ import (
 	"fmt"
 	"os"
 
+	nrgin "github.com/newrelic/go-agent/v3/integrations/nrgin"
 	"github.com/newrelic/go-agent/v3/newrelic"
 	"github.com/newrelic/newrelic-telemetry-sdk-go/telemetry"
 	otelnr "github.com/newrelic/opentelemetry-exporter-go/newrelic"
+	"go.opentelemetry.io/otel"
+	"go.opentelemetry.io/otel/propagation"
 	"go.opentelemetry.io/otel/sdk/trace"
 )
 
@@ -25,6 +28,7 @@ func initTracer() {
 	app, err := newrelic.NewApplication(
 		newrelic.ConfigAppName("opentelemetry&tracing"),
 		newrelic.ConfigLicense("5e8afd086390d507ce709c6c92da1e9bf8f0NRAL"),
+		newrelic.ConfigAppLogForwardingEnabled(true),
 	)
 
 	if err != nil {
@@ -32,7 +36,6 @@ func initTracer() {
 	}
 
 	defer app.Shutdown(10 * time.Second)
-	//api key = NRAK-HBLKL6XUTON1R5EKWLTX2DLD429
 	apiKey, ok := os.LookupEnv("NEW_RELIC_API_KEY")
 	fmt.Println("apikey", apiKey)
 	if !ok {
@@ -41,7 +44,7 @@ func initTracer() {
 	}
 
 	exporter, err := otelnr.NewExporter(
-		"Simple OpenTelemetry Service",
+		"Arun's OpenTelemetry Service",
 		apiKey,
 		telemetry.ConfigBasicErrorLogger(os.Stderr),
 		telemetry.ConfigBasicDebugLogger(os.Stderr),
@@ -61,16 +64,20 @@ func initTracer() {
 		trace.WithBatcher(exporter),
 	)
 
-	fmt.Println("p", p)
-}
+	// Register the tracer provider with the global trace provider
+	otel.SetTracerProvider(p)
+	otel.SetTextMapPropagator(propagation.NewCompositeTextMapPropagator(propagation.TraceContext{}, propagation.Baggage{}))
 
-func main() {
-	//initTracer()
-	config.LoadConfig()
 	router := gin.Default()
 	corsConfig := cors.DefaultConfig()
 	corsConfig.AllowAllOrigins = true
-	router.Use(cors.New(corsConfig))
+	router.Use(nrgin.Middleware(app))
 	route.SetupRoutes(router)
+}
+
+func main() {
+
+	config.LoadConfig()
+	initTracer()
 
 }

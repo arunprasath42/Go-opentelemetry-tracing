@@ -11,6 +11,8 @@ require (
 	github.com/rs/zerolog v1.29.1
 	github.com/sirupsen/logrus v1.9.0
 	go.opentelemetry.io/otel v0.20.0
+	go.opentelemetry.io/otel/sdk v0.20.0
+	go.opentelemetry.io/otel/trace v0.20.0
 	gorm.io/driver/mysql v1.5.0
 	gorm.io/gorm v1.25.0
 )
@@ -34,10 +36,8 @@ require (
 	github.com/subosito/gotenv v1.4.2 // indirect
 	github.com/twitchyliquid64/golang-asm v0.15.1 // indirect
 	go.opentelemetry.io/otel/metric v0.20.0 // indirect
-	go.opentelemetry.io/otel/sdk v0.20.0 // indirect
 	go.opentelemetry.io/otel/sdk/export/metric v0.20.0 // indirect
 	go.opentelemetry.io/otel/sdk/metric v0.20.0 // indirect
-	go.opentelemetry.io/otel/trace v0.20.0 // indirect
 	golang.org/x/arch v0.0.0-20210923205945-b76863e36670 // indirect
 	google.golang.org/genproto v0.0.0-20230110181048-76db0878b65f // indirect
 	google.golang.org/grpc v1.54.0 // indirect
@@ -57,6 +57,7 @@ require (
 	github.com/mattn/go-isatty v0.0.17 // indirect
 	github.com/modern-go/concurrent v0.0.0-20180306012644-bacd9c7ef1dd // indirect
 	github.com/modern-go/reflect2 v1.0.2 // indirect
+	github.com/newrelic/go-agent/v3/integrations/nrgin v1.1.3
 	github.com/pelletier/go-toml/v2 v2.0.6 // indirect
 	github.com/spf13/viper v1.15.0
 	github.com/ugorji/go/codec v1.2.9 // indirect
