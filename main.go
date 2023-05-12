@@ -19,7 +19,9 @@ import (
 	otelnr "github.com/newrelic/opentelemetry-exporter-go/newrelic"
 	"go.opentelemetry.io/otel"
 	"go.opentelemetry.io/otel/propagation"
+	"go.opentelemetry.io/otel/sdk/resource"
 	"go.opentelemetry.io/otel/sdk/trace"
+	"go.opentelemetry.io/otel/semconv"
 )
 
 //license key: 5e8afd086390d507ce709c6c92da1e9bf8f0NRAL
@@ -62,6 +64,7 @@ func initTracer() {
 	p := trace.NewTracerProvider(
 		trace.WithSampler(trace.AlwaysSample()),
 		trace.WithBatcher(exporter),
+		trace.WithResource(resource.NewWithAttributes(semconv.ServiceNameKey.String("****web-api****"))),
 	)
 
 	// Register the tracer provider with the global trace provider

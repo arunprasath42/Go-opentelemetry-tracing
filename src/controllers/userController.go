@@ -16,17 +16,11 @@ import (
 
 func GreetUser(c *gin.Context) {
 	tracer := otel.GetTracerProvider().Tracer("greet-user")
-
-	// ctx, span := tracer.Start(c.Request.Context(), "GreetUser") // Create a span
-	// defer span.End()
-
 	ctx := c.Request.Context()
-
-	ctx, span := tracer.Start(ctx, "GreetUser",
+	ctx, span := tracer.Start(ctx, "Arun's GreetUser",
 		trace.WithSpanKind(trace.SpanKindServer))
 
-	span.SetAttributes(attribute.String("http.method", c.Request.Method))
-	span.SetAttributes(attribute.String("http.url", c.Request.URL.String()))
+	defer span.End()
 
 	var service = service.TestAPIUsers{}
 	saved, err := service.Greetings(ctx)
@@ -35,8 +29,16 @@ func GreetUser(c *gin.Context) {
 		c.JSON(http.StatusInternalServerError, response.ErrorMessage(constant.INTERNALSERVERERROR, err))
 		return
 	}
-	span.SetAttributes(attribute.String("user", saved)) //record the span
 	log.Info().Msgf("Greetings to the user: %s", saved)
+
+	span.SetAttributes(attribute.String("trace_id", span.SpanContext().TraceID().String()))
+	span.SetAttributes(attribute.String("span_id", span.SpanContext().SpanID().String()))
+	span.SetAttributes(attribute.String("trace_state", span.SpanContext().TraceState().String()))
+	span.Tracer().Start(ctx, "Arun's GreetUser",
+		trace.WithSpanKind(trace.SpanKindServer))
+
+	span.SetAttributes(attribute.String("DEMO OUTCOME", saved))
+
 	c.JSON(http.StatusOK, response.SuccessResponse(saved))
 
 }
