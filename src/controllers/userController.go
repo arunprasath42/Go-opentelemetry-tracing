@@ -22,6 +22,17 @@ func GreetUser(c *gin.Context) {
 	span.SetAttributes(attribute.String("http.method", c.Request.Method))
 	span.SetAttributes(attribute.String("http.url", c.Request.URL.String()))
 
+	//get the span information
+	spanContext := span.SpanContext()
+	log.Info().Msgf("TraceID: %s", spanContext.TraceID().String())
+	log.Info().Msgf("SpanID: %s", spanContext.SpanID().String())
+	log.Info().Msgf("TraceFlags: %s", spanContext.TraceFlags().String())
+	log.Info().Msgf("TraceState: %s", spanContext.TraceState().String())
+
+	span.SetAttributes(attribute.String("TraceID", spanContext.TraceID().String()))
+	span.SetAttributes(attribute.String("SpanID", spanContext.SpanID().String()))
+	span.SetAttributes(attribute.String("TraceFlags", spanContext.TraceFlags().String()))
+
 	var service = service.TestAPIUsers{}
 	saved, err := service.Greetings(ctx)
 	if err != nil {

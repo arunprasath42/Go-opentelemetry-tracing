@@ -13,6 +13,7 @@ import (
 	"go.opentelemetry.io/otel/exporters/jaeger"
 	"go.opentelemetry.io/otel/propagation"
 	"go.opentelemetry.io/otel/sdk/trace"
+	// "go.opentelemetry.io/otel/semconv"
 )
 
 func initTracer() {
@@ -21,10 +22,10 @@ func initTracer() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	// Create the tracer provider
 	tp := trace.NewTracerProvider(
 		trace.WithSampler(trace.AlwaysSample()),
 		trace.WithBatcher(exporter),
+		//trace.WithResource(resource.NewWithAttributes(semconv.ServiceNameKey.String("****web-api****"))),
 	)
 	otel.SetTracerProvider(tp)
 	otel.SetTextMapPropagator(propagation.NewCompositeTextMapPropagator(propagation.TraceContext{}, propagation.Baggage{}))
