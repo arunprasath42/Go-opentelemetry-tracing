@@ -67,7 +67,6 @@ func initTracer() {
 		trace.WithResource(resource.NewWithAttributes(semconv.ServiceNameKey.String("****web-api****"))),
 	)
 
-	// Register the tracer provider with the global trace provider
 	otel.SetTracerProvider(p)
 	otel.SetTextMapPropagator(propagation.NewCompositeTextMapPropagator(propagation.TraceContext{}, propagation.Baggage{}))
 
