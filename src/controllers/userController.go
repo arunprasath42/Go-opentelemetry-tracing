@@ -27,7 +27,6 @@ func GreetUser(c *gin.Context) {
 	log.Info().Msgf("TraceID: %s", spanContext.TraceID().String())
 	log.Info().Msgf("SpanID: %s", spanContext.SpanID().String())
 	log.Info().Msgf("TraceFlags: %s", spanContext.TraceFlags().String())
-	log.Info().Msgf("TraceState: %s", spanContext.TraceState().String())
 
 	span.SetAttributes(attribute.String("TraceID", spanContext.TraceID().String()))
 	span.SetAttributes(attribute.String("SpanID", spanContext.SpanID().String()))
